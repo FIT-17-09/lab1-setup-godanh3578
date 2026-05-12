@@ -1,0 +1,78 @@
+openapi: 3.0.3
+
+info:
+  title: IoT Ingestion Service API
+  version: 1.0.0
+  description: API tiếp nhận dữ liệu từ thiết bị IoT
+
+servers:
+  - url: http://localhost:8000
+
+paths:
+  /api/v1/iot-data:
+    post:
+      summary: Nhận dữ liệu cảm biến IoT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - device_id
+                - temperature
+                - humidity
+                - motion
+                - timestamp
+              properties:
+                device_id:
+                  type: string
+                  example: esp32-a101
+
+                temperature:
+                  type: number
+                  example: 31.5
+
+                humidity:
+                  type: number
+                  example: 72
+
+                motion:
+                  type: boolean
+                  example: true
+
+                timestamp:
+                  type: string
+                  format: date-time
+                  example: "2026-05-02T09:00:00"
+
+      responses:
+        "200":
+          description: Dữ liệu đã được ghi nhận
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: accepted
+
+                  message:
+                    type: string
+                    example: Sensor data recorded successfully
+
+        "400":
+          description: Payload không hợp lệ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+
+                  message:
+                    type: string
+                    example: Invalid payload
